@@ -16,7 +16,8 @@ var (
 	BlockType          = "block"
 	TransactionType    = "transaction"
 	AlertType          = "alert"
-	Invocations        = []string{"any", "direct", "internal"}
+	TransactionFilterTypes = []string{"from", "to", "function", "eventEmitted", "logEmitted", "ethBalance", "stateChanged"}
+	Invocations           = []string{"any", "direct", "internal"}
 	InvocationAny      = "any"
 	InvocationDirect   = "direct"
 	InvocationInternal = "internal"
@@ -36,10 +37,16 @@ var (
 
 	CronParser = cron.NewParser(cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow)
 
-	AddressRegex = "^0x[0-9a-f]{40}$"
-	AddressRe    = regexp.MustCompile(AddressRegex)
-	SigRegex     = "^0x[0-9a-f]{8}$"
-	SigRe        = regexp.MustCompile(SigRegex)
+	AddressRegex   = "^0x[0-9a-f]{40}$"
+	AddressRegexCI = "^0x[0-9a-fA-F]{40}$"
+	AddressRe      = regexp.MustCompile(AddressRegex)
+	SigRegex       = "^0x[0-9a-f]{8}$"
+	SigRegexCI     = "^0x[0-9a-fA-F]{8}$"
+	SigRe          = regexp.MustCompile(SigRegex)
+
+	// Schema-only patterns
+	CronPattern       = `^(\S+\s+){4}\S+$`
+	ActionNamePattern = `^[a-zA-Z][a-zA-Z0-9_-]*$`
 
 	MsgTriggerTypeNotSupported             = "trigger type '%s' not supported, supported types %s"
 	MsgTriggerTypeMismatch                 = "trigger type '%s' different from configured trigger"
@@ -74,5 +81,10 @@ var (
 	MsgStartsWithInvalid                   = "'startsWith' element must be hex encoded and start with 0x"
 	MsgHexValueEmpty                       = "expected non-empty hex value"
 	MsgHexValueInvalid                     = "hex value must start with 0x, got %s"
-	MsgMinFilterConstraint                 = "constraint for minimum transaction filters must be fulfilled"
+	MsgMinFilterConstraint                = "constraint for minimum transaction filters must be fulfilled"
+	MsgAddressRequired                    = "'address' is required"
+	MsgBigIntNoConditionSet               = "must have at least one condition set (gte, lte, eq, gt, lt)"
+	MsgBigIntValueInvalid                 = "value '%s' must be a valid integer (decimal or 0x-prefixed hex)"
+	MsgStateChangedParamConditionRequired = "at least one of 'change', 'valueCmp', 'percentageCmp', 'storageSlotKey' is required"
+	MsgParamNameRequired                  = "'name' is required for parameter condition"
 )
